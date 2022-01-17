@@ -26,8 +26,8 @@ public class ContactController {
         return contactId;
     }
 
-    @GetMapping("/contact/userId")
-    public List<Contact> getAllContactsByUserId(@RequestBody int userId) {
+    @GetMapping("/contact/{userId}")
+    public List<Contact> getAllContactsByUserId(@PathVariable int userId) {
         return contactDAO.getAllContactsByUserId(userId);
     }
 
