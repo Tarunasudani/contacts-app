@@ -12,23 +12,21 @@ import java.sql.Timestamp;
 public class Contact {
     private Timestamp contactId;
     private int userId;
-    private String name;
-    private String phoneNo;
-    private String email;
-    private String address;
-    private String company;
+    private String contactName;
+    private String phoneNumber;
+    private Object contactDetails;
     private int score;
+    private Timestamp createdAt;
+    private Timestamp modifiedAt;
 
     @Override
     public String toString() {
         return "Contact{" +
                 "contactId=" + contactId +
                 ", userId=" + userId +
-                ", name='" + name + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", company='" + company + '\'' +
+                ", contactName='" + contactName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", contactDetails='" + contactDetails + '\'' +
                 ", score=" + score +
                 '}';
     }

@@ -1,6 +1,8 @@
 package com.flock.contactsapp.dao;
 
 import com.flock.contactsapp.model.Contact;
+import com.google.gson.Gson;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,11 +19,11 @@ public class ContactDAOImpl implements ContactDAO{
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public Timestamp addContact(int userId, String name, String phoneNo, String email, String address, String company) {
+    public Timestamp addContact(int userId, String contactName, String phoneNumber, Object contactDetails) {
         Timestamp contactId = Timestamp.from(Instant.now());
         int numOfRowsAffected = jdbcTemplate.update(
-                "INSERT INTO Contacts(contactId, userId, name, phoneNo, email, address, company) VALUES(?,?,?,?,?,?,?);",
-                new Object[] {contactId, userId, name, phoneNo, email, address, company}
+                "INSERT INTO Contacts(contactId, userId, contactName, phoneNumber, contactDetails) VALUES(?,?,?,?,?);",
+                new Object[] {contactId, userId, contactName, phoneNumber, new Gson().toJson(contactDetails)}
         );
         if(numOfRowsAffected==1)
             return contactId;
@@ -40,11 +42,12 @@ public class ContactDAOImpl implements ContactDAO{
     @Override
     public List<Contact> getAllContactsByUserId(int userId) {
         return jdbcTemplate.query(
-                "SELECT * FROM Contacts WHERE userId=? ORDER BY name;",
+                "SELECT * FROM Contacts WHERE userId=? ORDER BY contactName;",
                 new BeanPropertyRowMapper<Contact>(Contact.class),
                 new Object[] {userId}
         );
     }
+
 
     @Override
     public int deleteContact(int userId, Timestamp contactId) {
@@ -54,12 +57,4 @@ public class ContactDAOImpl implements ContactDAO{
         );
     }
 
-    @Override
-    public List<Contact> getContactsWithPrefix(int userId, String prefix) {
-        return jdbcTemplate.query(
-                "SELECT * FROM Contacts WHERE userId=? AND name LIKE ? ORDER BY name;",
-                new BeanPropertyRowMapper<Contact>(Contact.class),
-                new Object[] {userId,(new StringBuilder(prefix)).append("%")}
-        );
-    }
 }

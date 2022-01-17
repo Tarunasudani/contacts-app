@@ -2,12 +2,11 @@ package com.flock.contactsapp.controller;
 
 import com.flock.contactsapp.dao.ContactDAO;
 import com.flock.contactsapp.model.Contact;
-import com.flock.contactsapp.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class ContactController {
@@ -16,145 +15,32 @@ public class ContactController {
     private ContactDAO contactDAO;
 
     @PostMapping("/contact/new")
-    public Response addContact(@RequestBody Contact contact) {
+    public Timestamp addContact(@RequestBody Contact contact) {
+        System.out.println(contact.getContactDetails().toString());
         Timestamp contactId = contactDAO.addContact(
                 contact.getUserId(),
-                contact.getName(),
-                contact.getPhoneNo(),
-                contact.getEmail(),
-                contact.getAddress(),
-                contact.getCompany()
+                contact.getContactName(),
+                contact.getPhoneNumber(),
+                contact.getContactDetails()
         );
-        if(contactId != null ) {
-            return
-                    new Response(
-                            "success",
-                            new HashMap<String, Object>() {{
-                                put("contactId",contactId.toString());
-                            }}
-                    );
-        } else {
-            return
-                    new Response(
-                        "failure",
-                        new HashMap<String, Object>() {{
-                            put("error", "Something went wrong!!!!");
-                        }}
-                    );
-        }
+        return contactId;
     }
 
     @GetMapping("/contact/userId")
-    public Response getAllContactsByUserId(@RequestBody int userId) {
-        try {
-            return
-                    new Response(
-                            "success",
-                            new HashMap<String, Object>() {{
-                                put("contacts",contactDAO.getAllContactsByUserId(userId));
-                            }}
-                    );
-        } catch (Exception e) {
-            System.err.println(e);
-            return
-                    new Response(
-                        "failure",
-                        new HashMap<String, Object>() {{
-                            put("error","Something went wrong!!!");
-                        }}
-                );
-        }
+    public List<Contact> getAllContactsByUserId(@RequestBody int userId) {
+        return contactDAO.getAllContactsByUserId(userId);
     }
+
 
     @PutMapping("/contact/updateScore")
-    public Response updateScore(@RequestBody Contact contact) {
-        try {
-            if(contactDAO.updateScore(contact.getUserId(), contact.getContactId()) == 1) {
-                return
-                        new Response(
-                                "success",
-                                new HashMap<String, Object>() {{
-                                    put("message", "Score updated!!!");
-                                }}
-                        );
-            } else {
-                System.err.println("Contact not found!!!");
-                return
-                        new Response(
-                                "failure",
-                                new HashMap<String, Object>() {{
-                                    put("error", "Contact not found!!!");
-                                }}
-                        );
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-            return
-                    new Response(
-                            "failure",
-                            new HashMap<String, Object>() {{
-                                put("error", "Something went wrong!!!");
-                            }}
-                    );
-        }
+    public int updateScore(@RequestBody Contact contact) {
+        return contactDAO.updateScore(contact.getUserId(), contact.getContactId());
     }
+
 
     @DeleteMapping("/contact/delete")
-    public Response deleteContact(@RequestBody Contact contact) {
-        try {
-            if(contactDAO.deleteContact(contact.getUserId(), contact.getContactId()) == 1) {
-                return
-                        new Response(
-                                "success",
-                                new HashMap<String, Object>() {{
-                                    put("message", "Contact successfully deleted");
-                                }}
-                        );
-            } else {
-                System.err.println("Contact not found!!!");
-                return
-                        new Response(
-                                "failure",
-                                new HashMap<String, Object>() {{
-                                    put("error", "Contact not found!!!");
-                                }}
-                        );
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-            return
-                    new Response(
-                            "failure",
-                            new HashMap<String, Object>() {{
-                                put("error", "Something went wrong!!!");
-                            }}
-                    );
-        }
+    public int deleteContact(@RequestBody Contact contact) {
+        return contactDAO.deleteContact(contact.getUserId(), contact.getContactId());
     }
-
-
-    @GetMapping("/contact/prefix")
-    public Response getContactsWithPrefix(@RequestBody Contact contact) {
-        try {
-            return
-                    new Response(
-                            "success",
-                            new HashMap<String, Object>() {{
-                                put("contacts",contactDAO.getContactsWithPrefix(contact.getUserId(), contact.getName()));
-                            }}
-                    );
-        } catch (Exception e) {
-            System.err.println(e);
-            return
-                    new Response(
-                            "failure",
-                            new HashMap<String, Object>() {{
-                                put("error","Something went wrong!!!");
-                            }}
-                    );
-        }
-    }
-
-
 
 }
