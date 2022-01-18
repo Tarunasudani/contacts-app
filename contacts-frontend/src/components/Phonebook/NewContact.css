@@ -1,0 +1,51 @@
+.new-contact {
+    flex: 0.65;
+    padding: 28px;
+}
+
+.new-contact .name{
+    background-color: #212327;
+    border: none;
+    color: #04BE50;
+    width: 100%;
+    padding-bottom: 28px;
+}
+
+.new-contact .name:focus {
+    outline: 1px solid #494C4F;
+}
+
+.details{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    color: #898A8C;
+}
+
+.field {
+    padding: 21px 0;
+    display: flex;
+    flex:1 1;
+    justify-content: space-between;
+    margin-right: 21px;
+    align-items: center;
+}
+
+.field p{
+    padding: 14px;
+}
+
+.field input {
+    background-color: #212327;
+    border: 1px solid #898A8C;
+    padding: 12px;
+    font-size: 16px;
+    color: #898A8C;
+}
+
+.new-contact .buttons{
+    margin: 28px 14px;
+    display: flex;
+    flex-wrap: wrap;
+}

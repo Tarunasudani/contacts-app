@@ -1,0 +1,11 @@
+.sidebar-contact {
+    padding: 21px;
+    display: flex;
+    font-size: 18px;
+    align-items: center;
+    color: #898A8C;
+}
+
+.sidebar-contact p {
+    padding-left: 21px;
+}

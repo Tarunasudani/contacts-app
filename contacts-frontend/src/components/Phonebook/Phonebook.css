@@ -1,0 +1,7 @@
+.phonebook {
+    display: flex;
+    flex-direction: row;
+    background-color: #212327;
+    width: 100vw;
+    height: 100vh;
+}

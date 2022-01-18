@@ -1,0 +1,34 @@
+.landing-page {
+    background-color: #2F3136;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-section {
+    background-color: #212327;
+    box-sizing: border-box;
+    width: 60vw;
+    flex: 0.6 1;
+    display: flex;
+    flex-direction: column;
+    padding: 35px 70px 70px;
+    justify-content: space-between;
+    align-items: center;
+}
+.main-section h1{
+    color: rgb(10, 190, 81);
+    width: fit-content;
+    font-size: 48px;
+    text-align: center;
+}
+
+.main-section .buttons{
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
