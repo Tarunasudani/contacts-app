@@ -39,12 +39,14 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public User verifyUser(String email, String password) {
-        return
-                jdbcTemplate.queryForObject(
-                        "SELECT * FROM User WHERE email=? AND password=?",
-                        new BeanPropertyRowMapper<User>(User.class),
-                        email,
-                        password
-                );
+        User fetchedUser = jdbcTemplate.queryForObject(
+                "SELECT * FROM User WHERE email=? AND password=?",
+                new BeanPropertyRowMapper<User>(User.class),
+                email,
+                password
+        );
+
+        return fetchedUser;
+
     }
 }

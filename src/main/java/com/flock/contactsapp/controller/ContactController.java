@@ -16,7 +16,7 @@ public class ContactController {
 
     @PostMapping("/contact/new")
     public Timestamp addContact(@RequestBody Contact contact) {
-        System.out.println(contact.getContactDetails().toString());
+        System.out.println(contact);
         Timestamp contactId = contactDAO.addContact(
                 contact.getUserId(),
                 contact.getContactName(),
