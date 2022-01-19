@@ -1,23 +1,21 @@
 package com.flock.contactsapp.util;
-
 import com.flock.contactsapp.dao.UserDAO;
 import io.jsonwebtoken.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+@Component
 public class JwtUtil {
 
     @Autowired
     UserDAO userDAO;
 
-    public static  String createToken(int userId, String subject, long expirationTime) {
+    public static String createToken(int userId, String subject, long expirationTime) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         String secret = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
@@ -37,7 +35,7 @@ public class JwtUtil {
         return builder.compact();
     }
 
-    public  Claims parseToken(String jwt) {
+    public Claims parseToken(String jwt) {
 
         String secret = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
@@ -51,11 +49,11 @@ public class JwtUtil {
         return claims;
     }
 
-    public boolean verifyToken(String sessionToken) {
+    public Integer verifyToken(String sessionToken) {
         Claims tokenDetails = parseToken(sessionToken);
 
         if ( userDAO.getUserById(Integer.parseInt(tokenDetails.getId())).size() == 0 )
-            return false;
-        return true;
+            return -1;
+        return Integer.parseInt(tokenDetails.getId());
     }
 }

@@ -1,5 +1,4 @@
 package com.flock.contactsapp.controller;
-
 import com.flock.contactsapp.dao.ContactDAO;
 import com.flock.contactsapp.model.Contact;
 import com.flock.contactsapp.util.JwtUtil;
@@ -11,22 +10,25 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 public class ContactController {
 
     @Autowired
-    private ContactDAO contactDAO;
+    ContactDAO contactDAO;
 
+    @Autowired
     JwtUtil jwtUtil;
 
     @PostMapping("/contact/new")
-    public ResponseEntity<Timestamp> addContact(@RequestBody Contact contact, @RequestHeader("session-token") String sessionToken) {
-        if ( jwtUtil.verifyToken(sessionToken) == false ) {
+    public ResponseEntity<Timestamp> addContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
+        Integer userId = jwtUtil.verifyToken(sessionToken);
+        if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         System.out.println(contact);
         Timestamp contactId = contactDAO.addContact(
-                contact.getUserId(),
+                userId,
                 contact.getContactName(),
                 contact.getPhoneNumber(),
                 contact.getContactDetails()
@@ -34,9 +36,10 @@ public class ContactController {
         return new ResponseEntity<>(contactId, HttpStatus.OK);
     }
 
-    @GetMapping("/contact/{userId}")
-    public ResponseEntity<List<Contact>> getAllContactsByUserId(@PathVariable int userId, @RequestHeader("session-token") String sessionToken) {
-        if ( jwtUtil.verifyToken(sessionToken) == false ) {
+    @GetMapping("/contact/all")
+    public ResponseEntity<List<Contact>> getAllContactsByUserId(@RequestHeader("Authorization") String sessionToken) {
+        Integer userId = jwtUtil.verifyToken(sessionToken);
+        if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(contactDAO.getAllContactsByUserId(userId), HttpStatus.OK);
@@ -44,20 +47,22 @@ public class ContactController {
 
 
     @PutMapping("/contact/updateScore")
-    public ResponseEntity<Integer> updateScore(@RequestBody Contact contact, @RequestHeader("session-token") String sessionToken) {
-        if ( jwtUtil.verifyToken(sessionToken) == false ) {
+    public ResponseEntity<Integer> updateScore(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
+        Integer userId = jwtUtil.verifyToken(sessionToken);
+        if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(contactDAO.updateScore(contact.getUserId(), contact.getContactId()), HttpStatus.OK);
+        return new ResponseEntity<>(contactDAO.updateScore(userId, contact.getContactId()), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/contact/delete")
-    public ResponseEntity<Integer> deleteContact(@RequestBody Contact contact, @RequestHeader("session-token") String sessionToken) {
-        if ( jwtUtil.verifyToken(sessionToken) == false ) {
+    public ResponseEntity<Integer> deleteContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
+        Integer userId = jwtUtil.verifyToken(sessionToken);
+        if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(contactDAO.deleteContact(contact.getUserId(), contact.getContactId()), HttpStatus.OK);
+        return new ResponseEntity<>(contactDAO.deleteContact(userId, contact.getContactId()), HttpStatus.OK);
     }
 
 }

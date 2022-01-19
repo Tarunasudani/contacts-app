@@ -2,7 +2,6 @@ package com.flock.contactsapp.dao;
 
 import com.flock.contactsapp.model.Contact;
 import com.google.gson.Gson;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

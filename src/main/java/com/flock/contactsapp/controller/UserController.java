@@ -1,10 +1,7 @@
 package com.flock.contactsapp.controller;
-
 import com.flock.contactsapp.dao.UserDAO;
 import com.flock.contactsapp.model.User;
 import com.flock.contactsapp.util.JwtUtil;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
