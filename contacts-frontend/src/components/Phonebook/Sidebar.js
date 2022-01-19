@@ -1,104 +1,60 @@
 import AddIcon from '@mui/icons-material/Add';
-import { IconButton } from '@mui/material';
+import { IconButton, LinearProgress } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts, addNewContact } from '../../redux/actions/contactActions';
 import "./Sidebar.css";
 import SidebarContact from './SidebarContact';
 
 
-const contacts = [
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Ram Murti",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    },
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Tom harvey",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    },
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Shyam Sundar",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    },
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Vishesh Aggarwal",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    },
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Tom",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    }
-    ,{
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Tom",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    },
-    {
-        "contactId": "2022-01-17T15:23:21.000+00:00",
-        "userId": 1,
-        "contactName": "Tom",
-        "phoneNumber": "95821",
-        "contactDetails": JSON.parse("\"{'email': 'tom@gmail.com','address': 'address 1','company': 'Flock'}\""),
-        "score": 0,
-        "createdAt": "2022-01-17T15:23:21.000+00:00",
-        "modifiedAt": "2022-01-17T15:23:21.000+00:00"
-    }
-];
-
 function Sidebar() {
+
+    const dispatch = useDispatch();
+    const contactSelector = useSelector((state) => state.contact);
+    const [sortBy, setSortBy] = useState("contactName");
+    const [searchPrefix, setSearchPrefix] = useState("");
+    
+    useEffect(() => {
+        dispatch(getContacts());
+    }, [dispatch])
+
+
+    function compareFn(contactA, contactB) {
+        if (contactA[sortBy] < contactB[sortBy]) {
+            return -1*(sortBy==="score" ? -1 : 1);
+        }
+        if (contactA[sortBy] > contactB[sortBy]) {
+            return 1*(sortBy==="score" ? -1 : 1);
+        }
+        return 0;
+    }
+    
+
     return (
         <div className="sidebar">
             <div className="toolbar">
-                <input className="search" placeholder="Search" />
-                <select placeholder="Sort By">
+                <input className="search" placeholder="Search" value={searchPrefix} onChange={(e) => setSearchPrefix(e.target.value)} />
+                <select placeholder="Sort By" onChange={(e) => setSortBy(e.target.value)}>
                     <option value="contactName">Name</option>
                     <option value="score">Score</option>
                 </select>
                 <div className="add-icon">
-                    <IconButton>
+                    <IconButton onClick={() => {dispatch(addNewContact())}}>
                         <AddIcon style={{color: "#494C4F"}}/>
                     </IconButton>
                 </div>
             </div>
             <hr />
+
             <div style={{overflowY: "auto"}}>
                 {
-                    contacts.map((contact, id) => (
-                        
-                        <SidebarContact key={id} contact={contact} colorId={Math.floor(Math.random() * 10)} />
-                    ))
+                    contactSelector.contactLoading ? 
+                        <LinearProgress /> : 
+                        contactSelector.contacts && contactSelector.contacts
+                            .filter((contact) => contact.contactName.substring(0,searchPrefix.length).toLowerCase() === searchPrefix.toLowerCase())
+                            .sort(compareFn).map((contact, id) => (
+                                <SidebarContact key={id} contact={contact} colorId={id%10} /> 
+                            ))
                 }
             </div>
         </div>
