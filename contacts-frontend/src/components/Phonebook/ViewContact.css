@@ -1,0 +1,53 @@
+.view-contact {
+    background-color: #212327;
+    height: 100vh;
+  }
+  
+  .content {
+    border-width: 1px;
+    border-color: grey;
+    border-style: solid;
+    padding: 10px;
+    display: flex;
+  }
+  
+  .view-contact .name {
+    border: none;
+    color: #04be50;
+    width: 100%;
+    padding-bottom: 28px;
+  }
+  .edit {
+    color: #04be50;
+    float: right;
+    margin: 20px;
+  }
+  .headers {
+    display: flex;
+  }
+  
+  .view-contact .name:focus {
+    outline: 1px solid #494c4f;
+  }
+  
+  .details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    color: #898a8c;
+  }
+  
+  .field {
+    padding: 21px 0;
+    display: flex;
+    flex: 1 1;
+    justify-content: space-between;
+    margin-right: 21px;
+    align-items: center;
+  }
+  
+  .field p {
+    padding: 20px;
+  }
+  

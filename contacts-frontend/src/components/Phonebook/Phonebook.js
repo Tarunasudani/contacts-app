@@ -2,6 +2,7 @@ import Sidebar from "./Sidebar";
 import "./Phonebook.css";
 import NewContact from "./NewContact";
 import { useSelector } from "react-redux";
+import ViewContact from "./ViewContact";
 
 function Phonebook() {
 
@@ -12,6 +13,9 @@ function Phonebook() {
             <Sidebar />
             {
                 contactSelector.addNewContact && <NewContact />
+            }
+            {
+                contactSelector.selectedContact && <ViewContact/>
             }
         </div>
 
