@@ -15,11 +15,11 @@ function NewContact() {
             dispatch(createContact({
                 "contactName": contactSelector.newContact.contactName,
                 "phoneNumber": contactSelector.newContact.phoneNumber,
-                "contactDetails": JSON.stringify({
+                "contactDetails": {
                     "email": contactSelector.newContact.email,
                     "address": contactSelector.newContact.address,
                     "company": contactSelector.newContact.company,
-                })
+                }
             }))
         } else {
             alert("Name and Phone number are required fields")

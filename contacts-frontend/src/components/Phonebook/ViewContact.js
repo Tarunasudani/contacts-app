@@ -24,7 +24,7 @@ function ViewContact() {
 
         <div className="field">
           <p>Email:</p>
-          <p className="content">{contact.contactDetails.phoneNumber}</p>
+          <p className="content">{contact.contactDetails.email}</p>
         </div>
 
         <div className="field">
