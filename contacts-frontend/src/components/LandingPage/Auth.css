@@ -1,0 +1,22 @@
+.auth-field {
+    display: flex;
+    margin: 28px 0;
+    font-size: 18px;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.auth-field p{
+    color: white;
+    min-width: 85px;
+}
+
+.auth-field input{
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 14px;
+    flex: 0.6 1;
+}
