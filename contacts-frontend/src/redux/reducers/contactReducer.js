@@ -5,6 +5,7 @@ const initialState = {
     error: null,
     contactsLoading: false,
     addNewContact: false,
+    selectedContact : null,
     newContact: {
         contactName: "Name",
         phoneNumber: "",
@@ -90,6 +91,13 @@ const contactReducer = (prevState = initialState, action) => {
                     company: "",        
                 },
                 newContactError: action.payload
+            }
+        
+        case SELECT_CONTACT:
+            let contact = action.payload
+            return {
+                ...prevState,
+                selectedContact : contact
             }
 
         default:
