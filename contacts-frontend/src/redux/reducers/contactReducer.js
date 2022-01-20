@@ -1,10 +1,11 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT } from "../actions/actionTypes";
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT } from "../actions/actionTypes";
 
 const initialState = {
     contacts: null,
     error: null,
     contactsLoading: false,
     addNewContact: false,
+    selectedContact : null,
     newContact: {
         contactName: "Name",
         phoneNumber: "",
@@ -38,7 +39,8 @@ const contactReducer = (prevState = initialState, action) => {
 
         case ADD_NEW_CONTACT: return {
             ...prevState,
-            addNewContact: true
+            addNewContact: true,
+            selectedContact: null
         }
 
         case CANCEL_NEW_CONTACT: return {
@@ -90,6 +92,14 @@ const contactReducer = (prevState = initialState, action) => {
                     company: "",        
                 },
                 newContactError: action.payload
+            }
+        
+        case SELECT_CONTACT:
+            let currentContact = action.payload
+            return {
+                ...prevState,
+                selectedContact : currentContact,
+                addNewContact : false
             }
 
         default:

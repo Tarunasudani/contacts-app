@@ -1,7 +1,7 @@
 package com.flock.contactsapp.controller;
 import com.flock.contactsapp.dao.ContactDAO;
-import com.flock.contactsapp.model.Contact;
 import com.flock.contactsapp.util.JwtUtil;
+import com.flock.contactsapp.model.Contact;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

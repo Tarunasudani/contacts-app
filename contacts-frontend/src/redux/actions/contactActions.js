@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT } from "./actionTypes"
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, SELECT_CONTACT, UPDATE_NEW_CONTACT } from "./actionTypes"
 import axios from "axios";
 
 
@@ -73,6 +73,13 @@ export const createNewContactSuccess = (contactId, contact) => {
             contactId: contactId,
             ...contact
         }
+    }
+}
+
+export const selectContact = (contact) => {
+    return {
+        type : SELECT_CONTACT,
+        payload: contact
     }
 }
 
