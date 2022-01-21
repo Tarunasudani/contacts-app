@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT } from "../actions/actionTypes";
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE } from "../actions/actionTypes";
 
 const initialState = {
     contacts: null,
@@ -6,6 +6,14 @@ const initialState = {
     contactsLoading: false,
     addNewContact: false,
     selectedContact : null,
+    editContact : {
+        editing : false,
+        contactName: "Name",
+        phoneNumber: "",
+        email: "",
+        address: "",
+        company: "", 
+    },
     newContact: {
         contactName: "Name",
         phoneNumber: "",
@@ -14,6 +22,7 @@ const initialState = {
         company: "",        
     },
     newContactError: null,
+    updateContactError : null,
 }
 
 const contactReducer = (prevState = initialState, action) => {
@@ -100,6 +109,37 @@ const contactReducer = (prevState = initialState, action) => {
                 ...prevState,
                 selectedContact : currentContact,
                 addNewContact : false
+            }
+        
+        case EDIT_CONTACT:
+            let editedContact = prevState.editContact;
+            editedContact[action.payload.field] = action.payload.value;
+            return {
+                ...prevState,
+                editContact : editedContact
+            }
+        
+        case UPDATE_CONTACT_SUCCESS:
+            editedContact = prevState.editContact;
+            editedContact.editing = false;
+            return {
+                ... prevState,
+                editContact : editedContact,
+                selectedContact : action.payload
+            }
+        
+        case UPDATE_CONTACT_FAILURE:
+            return {
+                ...prevState,
+                updateContactError : action.payload
+            }
+
+        case CANCEL_UPDATE : 
+            let failedUpdateContact = prevState.editContact;
+            failedUpdateContact.editing = false;
+            return {
+                ...prevState,
+                editContact : failedUpdateContact
             }
 
         default:
