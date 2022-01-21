@@ -34,7 +34,8 @@ function Login() {
                 <Button 
                     variant="contained" 
                     onClick={() => {
-                        dispatch(verifyUser(email,password,navigate))
+                        dispatch(verifyUser(email,password,navigate));
+                        setPassword("");
                     }} 
                     style={{backgroundColor: "#04BE50", margin: "7px"}}
                 >

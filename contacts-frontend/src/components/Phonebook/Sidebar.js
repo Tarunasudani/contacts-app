@@ -2,6 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { IconButton, LinearProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getContacts, addNewContact } from '../../redux/actions/contactActions';
 import "./Sidebar.css";
 import SidebarContact from './SidebarContact';
@@ -13,10 +14,11 @@ function Sidebar() {
     const contactSelector = useSelector((state) => state.contact);
     const [sortBy, setSortBy] = useState("contactName");
     const [searchPrefix, setSearchPrefix] = useState("");
+    const navigate = useNavigate();
     
     useEffect(() => {
-        dispatch(getContacts());
-    }, [dispatch])
+        dispatch(getContacts(navigate));
+    }, [dispatch, navigate])
 
 
     function compareFn(contactA, contactB) {

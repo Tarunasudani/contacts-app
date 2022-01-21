@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {updateNewContact, cancelNewContact, createContact} from '../../redux/actions/contactActions';
 
 
@@ -9,6 +10,7 @@ function NewContact() {
 
     const dispatch = useDispatch();
     const contactSelector = useSelector((state) => state.contact);
+    const navigate = useNavigate();
 
     function submitContact() {
         if(contactSelector.newContact.contactName.length > 0 && contactSelector.newContact.phoneNumber.length > 0) {
@@ -20,7 +22,7 @@ function NewContact() {
                     "address": contactSelector.newContact.address,
                     "company": contactSelector.newContact.company,
                 }
-            }))
+            }, navigate));
         } else {
             alert("Name and Phone number are required fields")
         }
