@@ -1,8 +1,9 @@
 import "./ViewContact.css";
 import EditIcon from "@mui/icons-material/Edit";
+import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
-import {updateContact, editContact, cancelUpdate} from '../../redux/actions/contactActions';
+import {updateContact, editContact, cancelUpdate, updateContactScore} from '../../redux/actions/contactActions';
 
 function ViewContact() {
 
@@ -11,15 +12,15 @@ function ViewContact() {
 
 
   function submitContact() {
-    if(contactSelector.newContact.contactName.length > 0 && contactSelector.newContact.phoneNumber.length > 0) {
+    if(contactSelector.editContact.contactName.length > 0 && contactSelector.editContact.phoneNumber.length > 0) {
         dispatch(updateContact({
             "contactId" : contactSelector.selectedContact.contactId,
-            "contactName": contactSelector.selectedContact.contactName,
-            "phoneNumber": contactSelector.selectedContact.phoneNumber,
+            "contactName": contactSelector.editContact.contactName,
+            "phoneNumber": contactSelector.editContact.phoneNumber,
             "contactDetails": {
-                "email": contactSelector.selectedContact.email,
-                "address": contactSelector.selectedContact.address,
-                "company": contactSelector.selectedContact.company,
+                "email": contactSelector.editContact.email,
+                "address": contactSelector.editContact.address,
+                "company": contactSelector.editContact.company,
             }
         }))
     } else {
@@ -78,7 +79,8 @@ function ViewContact() {
             (!(contactSelector.editContact.editing))
             &&
             <input value={JSON.parse(contactSelector.selectedContact.contactDetails).email} readOnly/>
-          }
+            }
+          
         </div>
 
         <div className="field">

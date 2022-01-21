@@ -52,17 +52,29 @@ public class ContactController {
         if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
+        System.out.println("updateScore : " + contact);
         return new ResponseEntity<>(contactDAO.updateScore(userId, contact.getContactId()), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/contact/delete")
     public ResponseEntity<Integer> deleteContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
+        System.out.println("delete: " + contact);
         Integer userId = jwtUtil.verifyToken(sessionToken);
         if ( userId == -1 ) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(contactDAO.deleteContact(userId, contact.getContactId()), HttpStatus.OK);
+    }
+
+    @PostMapping("/contact/update")
+    public ResponseEntity<Contact> updateContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
+        Integer userId = jwtUtil.verifyToken(sessionToken);
+        if ( userId == -1 ) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        System.out.println("updateContact " + contact);
+        return new ResponseEntity<Contact>(contactDAO.updateContact(userId, contact), HttpStatus.OK);
     }
 
 }

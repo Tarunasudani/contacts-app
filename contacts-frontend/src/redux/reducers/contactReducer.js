@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE } from "../actions/actionTypes";
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE, DELETE_CONTACT_FAILURE, DELETE_CONTACT_SUCCESS, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE  } from "../actions/actionTypes";
 
 const initialState = {
     contacts: null,
@@ -23,6 +23,8 @@ const initialState = {
     },
     newContactError: null,
     updateContactError : null,
+    deleteContactError : null,
+    updateContactScoreError : null,
 }
 
 const contactReducer = (prevState = initialState, action) => {
@@ -74,7 +76,7 @@ const contactReducer = (prevState = initialState, action) => {
 
         case CREATE_NEW_CONTACT_SUCCESS:
             let contact = action.payload
-            contact.contactDetails = JSON.stringify(contact.contactDetails)
+            contact.contactDetails = JSON.stringify(contact.contactDetails);
             let contactsList = prevState.contacts
                 contactsList.push(contact)
             return {
@@ -121,15 +123,22 @@ const contactReducer = (prevState = initialState, action) => {
             }
         
         case UPDATE_CONTACT_SUCCESS:
-            editedContact = prevState.editContact;
-            editedContact.editing = false;
             return {
-                ...prevState,
-                editContact : editedContact,
+                ... prevState,
+                editContact : {
+                    editing : false,
+                    contactName: "Name",
+                    phoneNumber: "",
+                    email: "",
+                    address: "",
+                    company: "", 
+                },
                 selectedContact : action.payload
             }
         
         case UPDATE_CONTACT_FAILURE:
+            let editedContactFailure = prevState.editContact;
+            editedContactFailure.editing = false;
             return {
                 ...prevState,
                 updateContactError : action.payload
@@ -141,6 +150,27 @@ const contactReducer = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 editContact : failedUpdateContact
+            }
+        
+        case DELETE_CONTACT_SUCCESS : 
+            return {
+                ...prevState,
+                selectedContact : null
+            }
+
+        case DELETE_CONTACT_FAILURE : 
+            return {
+                ... prevState,
+                deleteContactError : action.payload
+            }
+
+        case UPDATE_CONTACT_SCORE_SUCCESS :
+            return prevState
+        
+        case UPDATE_CONTACT_SCORE_FAILURE : 
+            return {
+                ...prevState,
+                updateContactScoreError : action.payload
             }
 
         default:
