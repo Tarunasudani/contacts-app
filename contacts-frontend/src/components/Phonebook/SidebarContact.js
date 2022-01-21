@@ -41,8 +41,8 @@ function SidebarContact({contact, colorId}) {
     const [hover, setHover] = useState(false);
 
     return (
-        <div style={{backgroundColor: (hover || isSelected ) &&  "#4A4C4F" }}>
-            <div onClick={() => {handleClick()}  } onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
+        <div id={contact.contactId} style={{backgroundColor: hover &&  "#4A4C4F"}}>
+            <div onClick={() => {dispatch(selectContact(contact)); dispatch(updateContactScore(contact))}  } onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
                 <Avatar sx={{bgcolor: colors[colorId]}}>{getInitials(contact.contactName)}</Avatar>
                 <p style={{width: "100%"}}>{contact.contactName}</p>
                 {

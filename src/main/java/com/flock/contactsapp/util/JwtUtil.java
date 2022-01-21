@@ -20,19 +20,28 @@ public class JwtUtil {
         String secret = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
                 SignatureAlgorithm.HS256.getJcaName());
-        long timeNow = System.currentTimeMillis();
-        Date now = new Date(timeNow);
+        long currentTimeMillis = System.currentTimeMillis();
+        Date now = new Date(currentTimeMillis);
         JwtBuilder builder = Jwts.builder().setId(Integer.toString(userId))
                 .setIssuedAt(now)
                 .setSubject(subject)
                 .setIssuer("ContactsApi")
                 .signWith(hmacKey);
         if (expirationTime > 0) {
-            long expMillis = timeNow + expirationTime;
+            long expMillis = currentTimeMillis + expirationTime;
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
         return builder.compact();
+    }
+
+
+    public Integer verifyToken(String sessionToken) {
+        Claims tokenDetails = parseToken(sessionToken);
+
+        if ( userDAO.getUserById(Integer.parseInt(tokenDetails.getId())).size() == 0 )
+            return -1;
+        return Integer.parseInt(tokenDetails.getId());
     }
 
     public Claims parseToken(String jwt) {
@@ -47,13 +56,5 @@ public class JwtUtil {
                 .parseClaimsJws(jwt).getBody();
 
         return claims;
-    }
-
-    public Integer verifyToken(String sessionToken) {
-        Claims tokenDetails = parseToken(sessionToken);
-
-        if ( userDAO.getUserById(Integer.parseInt(tokenDetails.getId())).size() == 0 )
-            return -1;
-        return Integer.parseInt(tokenDetails.getId());
     }
 }
