@@ -1,6 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContact, deleteContact, updateContactScore } from '../../redux/actions/contactActions';
 
@@ -13,6 +13,18 @@ import { colors } from '../../constants';
 function SidebarContact({contact, colorId}) {
 
     const dispatch = useDispatch();
+    const contactSelector = useSelector( (state) => state.contact );
+    const [isSelected, setIsSelected] = useState(false);
+
+    useEffect(() => {
+        if ( contactSelector.selectedContact) {
+            if (contactSelector.selectedContact.contactId === contact.contactId) {
+                setIsSelected(true);
+            } else {
+                setIsSelected(false);
+            }
+        }
+    }, [isSelected, contactSelector.selectedContact])
 
     function getInitials(name) {
         var initials = "";
@@ -21,11 +33,16 @@ function SidebarContact({contact, colorId}) {
         });
         return initials;
     }
+    const handleClick = () => {
+        dispatch(selectContact(contact)); 
+        dispatch(updateContactScore(contact)); 
+        setIsSelected(true);
+    }
     const [hover, setHover] = useState(false);
 
     return (
-        <div style={{backgroundColor: hover &&  "#4A4C4F"}}>
-            <div onClick={() => {dispatch(selectContact(contact)); dispatch(updateContactScore(contact))}  } onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
+        <div style={{backgroundColor: (hover || isSelected ) &&  "#4A4C4F" }}>
+            <div onClick={() => {handleClick()}  } onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
                 <Avatar sx={{bgcolor: colors[colorId]}}>{getInitials(contact.contactName)}</Avatar>
                 <p style={{width: "100%"}}>{contact.contactName}</p>
                 {
