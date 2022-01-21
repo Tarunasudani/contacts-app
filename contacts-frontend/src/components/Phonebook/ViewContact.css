@@ -12,15 +12,19 @@
   }
   
   .view-contact .name {
+    background-color: #212327;
     border: none;
-    color: #04be50;
+    color: #04BE50;
     width: 100%;
-    padding-bottom: 28px;
+    margin-bottom: 28px;
+    font-size: 36px;
+    font-weight: bold;
   }
   .edit {
     color: #04be50;
     float: right;
     margin: 20px;
+    cursor: pointer;
   }
   .headers {
     display: flex;
