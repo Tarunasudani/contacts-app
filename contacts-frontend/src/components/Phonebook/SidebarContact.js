@@ -2,7 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContact } from '../../redux/actions/contactActions';
+import { selectContact, deleteContact, updateContactScore } from '../../redux/actions/contactActions';
 
 import "./SidebarContact.css";
 import { IconButton } from '@mui/material';
@@ -26,12 +26,12 @@ function SidebarContact({contact, colorId}) {
 
     return (
         <div style={{backgroundColor: hover &&  "#4A4C4F"}}>
-            <div onClick={() => dispatch(selectContact(contact))} onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
+            <div onClick={() => {dispatch(selectContact(contact)); dispatch(updateContactScore(contact))}  } onMouseOver={() => {setHover(true)}} onMouseLeave={() => {setHover(false)}} className="sidebar-contact">
                 <Avatar sx={{bgcolor: colors[colorId]}}>{getInitials(contact.contactName)}</Avatar>
                 <p style={{width: "100%"}}>{contact.contactName}</p>
                 {
-                    hover && <IconButton>
-                        <DeleteIcon style={{color: "#898A8C"}}/>
+                    hover && <IconButton onClick = {() => dispatch( deleteContact(contact) ) } >
+                        <DeleteIcon  style={{color: "#898A8C"}}/>
                     </IconButton>
                 }
             </div>
