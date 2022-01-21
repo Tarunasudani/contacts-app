@@ -1,6 +1,6 @@
 import "./ViewContact.css";
 import EditIcon from "@mui/icons-material/Edit";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
 import {updateContact, editContact, cancelUpdate, updateContactScore} from '../../redux/actions/contactActions';
@@ -9,7 +9,6 @@ function ViewContact() {
 
   const contactSelector = useSelector((state) => state.contact);
   const dispatch = useDispatch();
-
 
   function submitContact() {
     if(contactSelector.editContact.contactName.length > 0 && contactSelector.editContact.phoneNumber.length > 0) {

@@ -1,9 +1,10 @@
 package com.flock.contactsapp.dao;
 
 import com.flock.contactsapp.model.Contact;
+import com.flock.contactsapp.response.ContactResponse;
+import com.flock.contactsapp.rowMapper.ContactResponseRowMapper;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,14 +19,27 @@ public class ContactDAOImpl implements ContactDAO{
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public Timestamp addContact(int userId, String contactName, String phoneNumber, Object contactDetails) {
+    public ContactResponse addContact(int userId, String contactName, String phoneNumber, Object contactDetails) {
         Timestamp contactId = Timestamp.from(Instant.now());
         int numOfRowsAffected = jdbcTemplate.update(
                 "INSERT INTO Contacts(contactId, userId, contactName, phoneNumber, contactDetails) VALUES(?,?,?,?,?);",
-                new Object[] {contactId, userId, contactName, phoneNumber, new Gson().toJson(contactDetails)}
+                contactId,
+                userId,
+                contactName,
+                phoneNumber,
+                new Gson().toJson(contactDetails)
         );
-        if(numOfRowsAffected==1)
-            return contactId;
+
+        if(numOfRowsAffected==1) {
+            return new ContactResponse(
+                    contactId,
+                    contactName,
+                    phoneNumber,
+                    contactDetails,
+                    0
+            );
+        }
+
         return null;
     }
 
@@ -33,17 +47,17 @@ public class ContactDAOImpl implements ContactDAO{
     public int updateScore(int userId, Timestamp contactId) {
         return jdbcTemplate.update(
                 "UPDATE Contacts SET score = score + 1 WHERE userId=? AND contactId=?;",
-                new Object[]{userId, contactId}
+                userId,
+                contactId
         );
-
     }
 
     @Override
-    public List<Contact> getAllContactsByUserId(int userId) {
+    public List<ContactResponse> getAllContactsByUserId(int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM Contacts WHERE userId=? ORDER BY contactName;",
-                new BeanPropertyRowMapper<Contact>(Contact.class),
-                new Object[] {userId}
+                new ContactResponseRowMapper(),
+                userId
         );
     }
 
@@ -57,17 +71,18 @@ public class ContactDAOImpl implements ContactDAO{
     }
 
     @Override
-    public Contact updateContact(int userId, Contact contact) {
+    public ContactResponse updateContact(int userId, Contact contact) {
          int changed = jdbcTemplate.update(
                 "UPDATE contacts " +
                         "SET contactName=? , phoneNumber=? , contactDetails=?" +
                         "WHERE userId=? AND contactId=?;",
-                new Object[]{contact.getContactName(), contact.getPhoneNumber(), new Gson().toJson(contact.getContactDetails()),
-                userId, contact.getContactId()}
-
-        );
-        contact.setUserId(userId);
-         return contact;
+                 contact.getContactName(),
+                 contact.getPhoneNumber(),
+                 new Gson().toJson(contact.getContactDetails()),
+                 userId,
+                 contact.getContactId()
+         );
+         return new ContactResponse(contact);
     }
 
 }
