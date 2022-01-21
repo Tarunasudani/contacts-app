@@ -1,6 +1,6 @@
 import "./Auth.css"
 import Button from '@mui/material/Button';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {verifyUser} from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,12 @@ function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userSelector = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if(sessionStorage.getItem("sessionToken") ) {
+            navigate("/app");
+        }
+    }, [navigate])
 
     return (
         <div className="landing-page">

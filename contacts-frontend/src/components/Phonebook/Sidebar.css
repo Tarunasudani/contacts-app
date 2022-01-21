@@ -15,25 +15,15 @@
 
 .toolbar .search {
     background-color: #212327;
-    flex: 0.6;
+    flex: 0.7;
     border: none;
     color: #898A8C;
     margin: 14px;
 }
 
-.toolbar select {
-    background-color: #212327;
-    flex: 0.25;
-    border: none;
-    color: #898A8C;
-    padding: 0 7px;
+.toolbar .icon{
     border-left: 1px solid #494C4F;
-}
-
-.toolbar .add-icon{
-    border-left: 1px solid #494C4F;
-    flex: 0.15;
-    margin-left: 7px;
+    flex: 0.1;
     text-align: center;
 }
 

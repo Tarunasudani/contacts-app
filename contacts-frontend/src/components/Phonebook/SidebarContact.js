@@ -1,7 +1,7 @@
 import Avatar from '@mui/material/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { selectContact } from '../../redux/actions/contactActions';
 
 import "./SidebarContact.css";
@@ -12,7 +12,6 @@ import { colors } from '../../constants';
 
 function SidebarContact({contact, colorId}) {
 
-    const contactSelector = useSelector((state) => state.contact);
     const dispatch = useDispatch();
 
     function getInitials(name) {
