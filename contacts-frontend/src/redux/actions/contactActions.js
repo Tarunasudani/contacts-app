@@ -22,7 +22,7 @@ export const getAllContactsFailure = error => {
     }
 }
 
-export const getContacts = () => {
+export const getContacts = (navigate) => {
     return (dispatch) => {
         dispatch(getAllContacts());
         axios({
@@ -39,6 +39,8 @@ export const getContacts = () => {
             })
             .catch(error => {
                 dispatch(getAllContactsFailure(error.message));
+                alert("Session token expired. Login again!!");
+                navigate("/login");
             })
     }
 }
@@ -91,7 +93,7 @@ export const createNewContactFailure = (error) => {
     }
 }
 
-export const createContact = (payload) => {
+export const createContact = (payload, navigate) => {
     return (dispatch) => {
         axios({
             method: 'post',
@@ -109,6 +111,8 @@ export const createContact = (payload) => {
             })
             .catch(error => {
                 dispatch(createNewContactFailure(error.message));
+                alert("Session token expired. Login again!!");
+                navigate("/login");
             })
     }
 }

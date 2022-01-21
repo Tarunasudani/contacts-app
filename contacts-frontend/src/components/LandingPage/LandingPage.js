@@ -2,11 +2,20 @@ import Button from '@mui/material/Button';
 import CallIcon from '@mui/icons-material/Call';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import "./LandingPage.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 
 function LandingPage() {
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(sessionStorage.getItem("sessionToken") ) {
+            navigate("/app");
+        }
+    }, [navigate])
 
     return (
         <div className="landing-page">

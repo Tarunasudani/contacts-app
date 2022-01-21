@@ -43,6 +43,8 @@ export const createUser = (email, password, navigate) => {
             })
             .catch(error => {
                 dispatch(authFailure(error.message));
+                alert("User already exists!!! Login Instead");
+                navigate("/login");
             })
     }
 }
@@ -64,9 +66,15 @@ export const verifyUser = (email, password, navigate) => {
             },
         })
             .then(response => {
-                sessionStorage.setItem("sessionToken", response.data.sessionToken);
-                dispatch(authSuccess());
-                navigate("/app");
+                let token = response.data.sessionToken;
+                if(token) {
+                    sessionStorage.setItem("sessionToken", token);
+                    dispatch(authSuccess());
+                    navigate("/app");
+                } else {
+                    dispatch(authFailure("Invalid Credentials"));
+                    alert("Invalid Credentials");
+                }
             })
             .catch(error => {
                 dispatch(authFailure(error.message));

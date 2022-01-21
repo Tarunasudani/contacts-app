@@ -12,7 +12,6 @@ import { colors } from '../../constants';
 
 function SidebarContact({contact, colorId}) {
 
-    const contactSelector = useSelector((state) => state.contact);
     const dispatch = useDispatch();
 
     function getInitials(name) {
