@@ -13,7 +13,7 @@ function App() {
       <Route path="/app" element={<Phonebook />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<h1 style={{textAlign: "center"}}>This route doesn't exist!!</h1>} />
+      <Route path="*" element={<p>This route doesn't exist!!</p>} />
     </Routes>
   );
 }
