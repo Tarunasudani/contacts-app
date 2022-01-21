@@ -1,6 +1,8 @@
 .view-contact {
     background-color: #212327;
     height: 100vh;
+    flex: 0.65;
+    margin: 28px;
   }
   
   .content {

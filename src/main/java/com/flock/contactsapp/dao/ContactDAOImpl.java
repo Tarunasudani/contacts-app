@@ -56,4 +56,18 @@ public class ContactDAOImpl implements ContactDAO{
         );
     }
 
+    @Override
+    public Contact updateContact(int userId, Contact contact) {
+         int changed = jdbcTemplate.update(
+                "UPDATE contacts " +
+                        "SET contactName=? , phoneNumber=? , contactDetails=?" +
+                        "WHERE userId=? AND contactId=?;",
+                new Object[]{contact.getContactName(), contact.getPhoneNumber(), new Gson().toJson(contact.getContactDetails()),
+                userId, contact.getContactId()}
+
+        );
+        contact.setUserId(userId);
+         return contact;
+    }
+
 }
