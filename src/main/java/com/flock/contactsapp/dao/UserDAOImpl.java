@@ -1,5 +1,6 @@
 package com.flock.contactsapp.dao;
 
+import com.flock.contactsapp.exception.InvalidUser;
 import com.flock.contactsapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -40,20 +41,25 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> verifyUser(String email, String password) {
-        return(jdbcTemplate.query(
+        List<User> users = jdbcTemplate.query(
                 "SELECT * FROM User WHERE email=? AND password=?",
                 new BeanPropertyRowMapper<User>(User.class),
                 email,
                 password
-        ));
+        );
+        if ( users.size() == 0 ) throw new InvalidUser("User Not Found");
+        return users;
     }
 
     @Override
     public List<User> getUserById(int userId) {
-        return(jdbcTemplate.query(
+        List<User> users = jdbcTemplate.query(
                 "SELECT * FROM User WHERE userId=?",
                 new BeanPropertyRowMapper<User>(User.class),
                 userId
-        ));
+        );
+
+        if ( users.size() == 0 ) throw new InvalidUser("User Not Found");
+        return users;
     }
 }
