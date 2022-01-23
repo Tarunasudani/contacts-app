@@ -16,4 +16,16 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(new Date(), exception.getMessage(), req.getDescription(false));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<?> authExceptionHandler(AuthorizationException e, WebRequest req) {
+        ErrorResponse errorResponse = new ErrorResponse(new Date(), e.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidUser.class)
+    public ResponseEntity<?> invalidUserHandler(InvalidUser e, WebRequest req) {
+        ErrorResponse errorResponse = new ErrorResponse(new Date(), e.getMessage(), req.getDescription(false));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 }

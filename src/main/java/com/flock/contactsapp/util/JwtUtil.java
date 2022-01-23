@@ -1,5 +1,6 @@
 package com.flock.contactsapp.util;
 import com.flock.contactsapp.dao.UserDAO;
+import com.flock.contactsapp.exception.AuthorizationException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,7 +41,7 @@ public class JwtUtil {
         Claims tokenDetails = parseToken(sessionToken);
 
         if ( userDAO.getUserById(Integer.parseInt(tokenDetails.getId())).size() == 0 )
-            return -1;
+            throw new AuthorizationException("Session Token inspired/invalid");
         return Integer.parseInt(tokenDetails.getId());
     }
 
