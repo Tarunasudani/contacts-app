@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {verifyUser} from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
+import { validateEmail } from "../../utils";
 function Login() {
 
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [authError, setAuthError] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userSelector = useSelector((state) => state.user);
@@ -19,10 +21,22 @@ function Login() {
         }
     }, [navigate])
 
+    const loginUser = () => {
+        if(!validateEmail(email)) {
+            setAuthError("Invalid E-mail");
+        } else if(password.length === 0) {
+            setAuthError("Password is empty!!!");
+        } else {
+            dispatch(verifyUser(email,password,navigate, setAuthError));
+            setAuthError(null);
+        }
+    }
+
     return (
         <div className="landing-page">
             <div className="main-section">
                 <h1>Login</h1>
+                <p style={ authError !== null ? {color: "red"} : {display: "none"} }>{authError}</p>
                 <div style={{width: "80%"}}>
                     <div className="auth-field">
                         <p>Email:</p>
@@ -40,8 +54,7 @@ function Login() {
                 <Button 
                     variant="contained" 
                     onClick={() => {
-                        dispatch(verifyUser(email,password,navigate));
-                        setPassword("");
+                        loginUser();
                     }} 
                     style={{backgroundColor: "#04BE50", margin: "7px"}}
                 >
