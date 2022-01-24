@@ -12,55 +12,37 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-
-    @Autowired
-    UserDAO userDAO;
+    private final static String KEY = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
+    private final static Key SIGNING_KEY = new SecretKeySpec(Base64.getDecoder().decode(KEY), SignatureAlgorithm.HS256.getJcaName());
 
     public static String createToken(int userId, String subject, long expirationTime) {
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        String secret = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
-                SignatureAlgorithm.HS256.getJcaName());
-        long currentTimeMillis = System.currentTimeMillis();
-        Date now = new Date(currentTimeMillis);
+        long currentTimeInMilliSec = System.currentTimeMillis();
+        Date tokenIssueAt = new Date(currentTimeInMilliSec);
+        long tokenExpiryInMilliSec = currentTimeInMilliSec + expirationTime;
+        Date tokenExpireAt = new Date(tokenExpiryInMilliSec);
+
         JwtBuilder builder = Jwts.builder().setId(Integer.toString(userId))
-                .setIssuedAt(now)
+                .setIssuedAt(tokenIssueAt)
                 .setSubject(subject)
                 .setIssuer("ContactsApi")
-                .signWith(hmacKey);
-        if (expirationTime > 0) {
-            long expMillis = currentTimeMillis + expirationTime;
-            Date exp = new Date(expMillis);
-            builder.setExpiration(exp);
-        }
+                .signWith(SIGNING_KEY)
+                .setExpiration(tokenExpireAt);
         return builder.compact();
     }
 
-
-    public Integer verifyToken(String sessionToken) {
-        Claims tokenDetails = parseToken(sessionToken);
-
-        if ( userDAO.getUserById(Integer.parseInt(tokenDetails.getId())).size() == 0 )
+    public Integer verifyTokenAndGetUserId(String sessionToken) {
+        try {
+            Claims tokenDetails = parseToken(sessionToken);
+            return Integer.parseInt(tokenDetails.getId());
+        } catch (ExpiredJwtException | SignatureException ex) {
             throw new AuthorizationException("Session Token inspired/invalid");
-        return Integer.parseInt(tokenDetails.getId());
+        }
     }
 
     public Claims parseToken(String jwt) {
-
-        String secret = "ABCKHJBCKJABCSJKBACJKBJABCJKBASCJHBAJCHBAJHCBAJCBJAHSCBJ";
-        Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
-                SignatureAlgorithm.HS256.getJcaName());
-
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(hmacKey)
-                    .build()
-                    .parseClaimsJws(jwt).getBody();
-
-            return claims;
-        } catch (Exception exception) {
-            throw new AuthorizationException("Session Expired/Invalid");
-        }
-
+        return Jwts.parserBuilder()
+                .setSigningKey(SIGNING_KEY)
+                .build()
+                .parseClaimsJws(jwt).getBody();
     }
 }
