@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, SELECT_CONTACT, UPDATE_NEW_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE , DELETE_CONTACT_FAILURE, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE, DELETE_CONTACT_SUCCESS, CREATE_NEW_CONTACT_FAILURE } from "./actionTypes"
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, SELECT_CONTACT, UPDATE_NEW_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE , DELETE_CONTACT_FAILURE, UPDATE_CONTACT_SCORE_SUCCESS, DELETE_CONTACT_SUCCESS, CREATE_NEW_CONTACT_FAILURE, SET_CONTACT_ERROR, SET_DEFAULT } from "./actionTypes"
 import axios from "axios";
 
 
@@ -147,7 +147,7 @@ export const updateContactFailure = (err) => {
     }
 }
 
-export const updateContact = (payload) => {
+export const updateContact = (payload, navigate) => {
     return (dispatch) => {
         axios({
             method: 'post',
@@ -165,7 +165,13 @@ export const updateContact = (payload) => {
                 dispatch(getContacts());
             })
             .catch(error => {
-                dispatch(updateContactFailure(error.message));
+                if(error.response && error.response.status === 401) {
+                    dispatch(updateContactFailure(error.response.data.message));
+                    sessionStorage.removeItem("sessionToken");
+                } else {
+                    dispatch(updateContactFailure(error.response.data.message));
+                    navigate("/error");
+                }
             })
     }
 }
@@ -188,7 +194,7 @@ export const deleteContactSuccess = () => {
     }
 }
 
-export const deleteContact = (contact) => {
+export const deleteContact = (contact, navigate) => {
     return (dispatch) => {
         axios({
             method: 'delete',
@@ -200,12 +206,18 @@ export const deleteContact = (contact) => {
             },
             data: contact,
         })
-            .then( () => {
+            .then(() => {
                 dispatch(getContacts());
                 dispatch(deleteContactSuccess());
             })
             .catch(error => {
-                dispatch(deleteContactFailure(error.message));
+                if(error.response && error.response.status === 401) {
+                    dispatch(deleteContactFailure(error.response.data.message));
+                    sessionStorage.removeItem("sessionToken");
+                } else {
+                    dispatch(deleteContactFailure(error.response.data.message));
+                    navigate("/error");
+                }
             })
     }
 }
@@ -241,5 +253,18 @@ export const updateContactScore = (contact) => {
             .catch(error => {
                 dispatch(updateContactScoreFailure(error.message));
             })
+    }
+}
+
+export const setContactError = (error) => {
+    return {
+        type: SET_CONTACT_ERROR,
+        payload: error
+    }
+}
+
+export const setDefault = () => {
+    return {
+        type: SET_DEFAULT
     }
 }

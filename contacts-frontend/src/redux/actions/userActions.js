@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AUTH, AUTH_FAILURE, AUTH_SUCCESS } from "./actionTypes";
+import { setDefault } from "./contactActions";
 
 export const auth = () => {
     return {
@@ -38,6 +39,7 @@ export const createUser = (email, password, navigate,setRegistrationError) => {
             .then(response => {
                 sessionStorage.setItem("sessionToken", response.data.sessionToken);
                 dispatch(authSuccess());
+                dispatch(setDefault());
                 navigate("/app");
             })
             .catch(error => {
@@ -67,6 +69,7 @@ export const verifyUser = (email, password, navigate, setAuthError) => {
                 let token = response.data.sessionToken;
                 sessionStorage.setItem("sessionToken", token);
                 dispatch(authSuccess());
+                dispatch(setDefault());
                 navigate("/app");
                 
             })

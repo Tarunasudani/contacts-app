@@ -7,12 +7,14 @@ import { selectContact, deleteContact, updateContactScore, getContacts } from '.
 import "./SidebarContact.css";
 import { IconButton } from '@mui/material';
 import { colors } from '../../constants';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function SidebarContact({contact, colorId}) {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const contactSelector = useSelector( (state) => state.contact );
     const [isSelected, setIsSelected] = useState(false);
 
@@ -49,7 +51,7 @@ function SidebarContact({contact, colorId}) {
                 <Avatar sx={{bgcolor: colors[colorId]}}>{getInitials(contact.contactName)}</Avatar>
                 <p style={{width: "100%"}}>{contact.contactName}</p>
                 {
-                    hover && <IconButton onClick = {(e) => { e.stopPropagation(); dispatch(deleteContact(contact)); }} >
+                    hover && <IconButton onClick = {(e) => { e.stopPropagation(); dispatch(deleteContact(contact, navigate)); }} >
                         <DeleteIcon  style={{color: "#898A8C"}}/>
                     </IconButton>
                 }

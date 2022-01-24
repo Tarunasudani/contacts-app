@@ -6,7 +6,6 @@ import Register from "./components/LandingPage/Register";
 import Phonebook from "./components/Phonebook/Phonebook";
 
 
-
 function App() {
   return (
     <Routes>

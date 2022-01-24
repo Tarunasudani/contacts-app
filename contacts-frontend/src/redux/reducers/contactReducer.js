@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE, DELETE_CONTACT_FAILURE, DELETE_CONTACT_SUCCESS, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE  } from "../actions/actionTypes";
+import { SET_CONTACT_ERROR, ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_FAILURE,  CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, UPDATE_NEW_CONTACT, SELECT_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE, DELETE_CONTACT_FAILURE, DELETE_CONTACT_SUCCESS, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE, SET_DEFAULT  } from "../actions/actionTypes";
 
 const initialState = {
     contacts: null,
@@ -21,10 +21,7 @@ const initialState = {
         address: "",
         company: "",        
     },
-    newContactError: null,
-    updateContactError : null,
-    deleteContactError : null,
-    updateContactScoreError : null,
+    contactError: null,
 }
 
 const contactReducer = (prevState = initialState, action) => {
@@ -39,6 +36,7 @@ const contactReducer = (prevState = initialState, action) => {
             contactsLoading: false,
             contacts: action.payload,
             error: null,
+            contactError: null,
         }
 
         case GET_ALL_CONTACTS_FAILURE: return {
@@ -89,7 +87,7 @@ const contactReducer = (prevState = initialState, action) => {
                     address: "",
                     company: "",        
                 },
-                newContactError: null,
+                contactError: null,
             }
         
         case CREATE_NEW_CONTACT_FAILURE:
@@ -110,7 +108,15 @@ const contactReducer = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 selectedContact : currentContact,
-                addNewContact : false
+                addNewContact : false,
+                editContact : {
+                    editing : false,
+                    contactName: "Name",
+                    phoneNumber: "",
+                    email: "",
+                    address: "",
+                    company: "", 
+                }
             }
         
         case EDIT_CONTACT:
@@ -132,7 +138,8 @@ const contactReducer = (prevState = initialState, action) => {
                     address: "",
                     company: "", 
                 },
-                selectedContact : action.payload
+                selectedContact : action.payload,
+                contactError: null
             }
         
         case UPDATE_CONTACT_FAILURE:
@@ -140,7 +147,7 @@ const contactReducer = (prevState = initialState, action) => {
             editedContactFailure.editing = false;
             return {
                 ...prevState,
-                updateContactError : action.payload
+                contactError : action.payload
             }
 
         case CANCEL_UPDATE : 
@@ -154,13 +161,14 @@ const contactReducer = (prevState = initialState, action) => {
         case DELETE_CONTACT_SUCCESS : 
             return {
                 ...prevState,
-                selectedContact : null
+                selectedContact : null,
+                contactError: null
             }
 
         case DELETE_CONTACT_FAILURE : 
             return {
                 ...prevState,
-                deleteContactError : action.payload
+                contactError : action.payload
             }
 
         case UPDATE_CONTACT_SCORE_SUCCESS :
@@ -169,7 +177,18 @@ const contactReducer = (prevState = initialState, action) => {
         case UPDATE_CONTACT_SCORE_FAILURE : 
             return {
                 ...prevState,
-                updateContactScoreError : action.payload
+                contactError : action.payload
+            }
+
+        case SET_CONTACT_ERROR: 
+            return {
+                ...prevState,
+                contactError: action.payload
+            }
+
+        case SET_DEFAULT:
+            return {
+                ...initialState
             }
 
         default:

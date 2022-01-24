@@ -2,29 +2,40 @@ import "./ViewContact.css";
 import EditIcon from "@mui/icons-material/Edit";
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
-import {updateContact, editContact, cancelUpdate, updateContactScore} from '../../redux/actions/contactActions';
+import { Link, useNavigate } from "react-router-dom";
+import {updateContact, editContact, cancelUpdate, setContactError} from '../../redux/actions/contactActions';
+import { validateEmail, validatePhoneNumber } from '../../utils';
+import { SESSION_EXPIRED } from '../../constants';
 
 function ViewContact() {
 
   const contactSelector = useSelector((state) => state.contact);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function submitContact() {
-    if(contactSelector.editContact.contactName.length > 0 && contactSelector.editContact.phoneNumber.length > 0) {
-        dispatch(updateContact({
-            "contactId" : contactSelector.selectedContact.contactId,
-            "contactName": contactSelector.editContact.contactName,
-            "phoneNumber": contactSelector.editContact.phoneNumber,
-            "contactDetails": {
-                "email": contactSelector.editContact.email,
-                "address": contactSelector.editContact.address,
-                "company": contactSelector.editContact.company,
-            }
-        }))
+
+    if(contactSelector.editContact.contactName.length === 0) {
+      dispatch(setContactError("Contact name not provided!!!"));
+    } else if(!validatePhoneNumber(contactSelector.editContact.phoneNumber)) {
+      dispatch(setContactError("Invalid phone number"));
+    } else if(contactSelector.editContact.email.length > 0 && !validateEmail(contactSelector.editContact.email)) {
+      dispatch(setContactError("Invalid email"));
     } else {
-        alert("Name and Phone number are required fields")
+        dispatch(updateContact({
+          "contactId" : contactSelector.selectedContact.contactId,
+          "contactName": contactSelector.editContact.contactName,
+          "phoneNumber": contactSelector.editContact.phoneNumber,
+          "contactDetails": {
+              "email": contactSelector.editContact.email,
+              "address": contactSelector.editContact.address,
+              "company": contactSelector.editContact.company,
+          }
+        }, navigate));
+        dispatch(setContactError(null));
     }
-  }
+}
+
   function editHandler() {
     dispatch(editContact("editing", true));
     dispatch(editContact("contactName", contactSelector.selectedContact.contactName));
@@ -32,7 +43,6 @@ function ViewContact() {
     dispatch(editContact("address", JSON.parse(contactSelector.selectedContact.contactDetails).address));
     dispatch(editContact("email", JSON.parse(contactSelector.selectedContact.contactDetails).email));
     dispatch(editContact("company", JSON.parse(contactSelector.selectedContact.contactDetails).company));
-
   }
 
   return (
@@ -57,6 +67,13 @@ function ViewContact() {
         }
         
       </div>
+      <p style={{textAlign: "center", color: "red"}}>{contactSelector.contactError}</p>
+      {
+          contactSelector.contactError === SESSION_EXPIRED && 
+              <Link to="/login">
+                  <p style={{textAlign: "center", color: "#0074CC"}}>Login again</p>
+              </Link>
+      }
 
       <div className="details">
         <div className="field">
