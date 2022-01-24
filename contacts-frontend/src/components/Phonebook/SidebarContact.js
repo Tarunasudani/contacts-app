@@ -2,7 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContact, deleteContact, updateContactScore } from '../../redux/actions/contactActions';
+import { selectContact, deleteContact, updateContactScore, getContacts } from '../../redux/actions/contactActions';
 
 import "./SidebarContact.css";
 import { IconButton } from '@mui/material';
@@ -37,6 +37,7 @@ function SidebarContact({contact, colorId}) {
     const handleClick = () => {
         dispatch(selectContact(contact)); 
         dispatch(updateContactScore(contact)); 
+        dispatch(getContacts());
         setIsSelected(true);
     }
 
