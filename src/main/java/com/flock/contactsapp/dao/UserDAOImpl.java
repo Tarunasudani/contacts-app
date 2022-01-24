@@ -52,14 +52,14 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<User> getUserById(int userId) {
-        List<User> users = jdbcTemplate.query(
+    public User getUserById(int userId) {
+        User user = jdbcTemplate.queryForObject(
                 "SELECT * FROM User WHERE userId=?",
                 new BeanPropertyRowMapper<User>(User.class),
                 userId
         );
 
-        if ( users.size() == 0 ) throw new InvalidUser("User Not Found");
-        return users;
+        if ( user == null ) throw new InvalidUser("User Not Found");
+        return user;
     }
 }
