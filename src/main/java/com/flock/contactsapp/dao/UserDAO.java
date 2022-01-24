@@ -11,5 +11,5 @@ public interface UserDAO {
     int addUser(String email, String password);
 
     List<User> verifyUser(String email, String password);
-    List<User> getUserById(int userId);
+    User getUserById(int userId);
 }
