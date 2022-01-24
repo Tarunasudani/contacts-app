@@ -51,11 +51,16 @@ public class JwtUtil {
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
                 SignatureAlgorithm.HS256.getJcaName());
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(hmacKey)
-                .build()
-                .parseClaimsJws(jwt).getBody();
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(hmacKey)
+                    .build()
+                    .parseClaimsJws(jwt).getBody();
 
-        return claims;
+            return claims;
+        } catch (Exception exception) {
+            throw new AuthorizationException("Session Expired/Invalid");
+        }
+
     }
 }

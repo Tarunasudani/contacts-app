@@ -76,7 +76,6 @@ const contactReducer = (prevState = initialState, action) => {
 
         case CREATE_NEW_CONTACT_SUCCESS:
             let contact = action.payload
-            contact.contactDetails = JSON.stringify(contact.contactDetails);
             let contactsList = prevState.contacts
                 contactsList.push(contact)
             return {

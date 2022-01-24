@@ -1,7 +1,10 @@
 import Button from '@mui/material/Button';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { SESSION_EXPIRED } from '../../constants';
 import {updateNewContact, cancelNewContact, createContact} from '../../redux/actions/contactActions';
+import { validateEmail, validatePhoneNumber } from '../../utils';
 
 
 import "./NewContact.css"
@@ -11,9 +14,17 @@ function NewContact() {
     const dispatch = useDispatch();
     const contactSelector = useSelector((state) => state.contact);
     const navigate = useNavigate();
+    const [newContactError, setNewContactError] = useState(null);
 
     function submitContact() {
-        if(contactSelector.newContact.contactName.length > 0 && contactSelector.newContact.phoneNumber.length > 0) {
+
+        if(contactSelector.newContact.contactName.length === 0) {
+            setNewContactError("Contact name not provided!!!")
+        } else if(!validatePhoneNumber(contactSelector.newContact.phoneNumber)) {
+            setNewContactError("Invalid phone number")
+        } else if(contactSelector.newContact.email.length > 0 && !validateEmail(contactSelector.newContact.email)) {
+            setNewContactError("Invalid email")
+        } else {
             dispatch(createContact({
                 "contactName": contactSelector.newContact.contactName,
                 "phoneNumber": contactSelector.newContact.phoneNumber,
@@ -22,15 +33,21 @@ function NewContact() {
                     "address": contactSelector.newContact.address,
                     "company": contactSelector.newContact.company,
                 }
-            }, navigate));
-        } else {
-            alert("Name and Phone number are required fields")
+            }, navigate, setNewContactError));
+            setNewContactError(null);
         }
     }
 
     return (
         <div className="new-contact">
             <strong><input className="name" name="contactName" onChange={(e) => dispatch(updateNewContact("contactName",e.target.value))} value={contactSelector.newContact.contactName}/></strong>
+            <p style={{textAlign: "center", color: "red"}}>{newContactError}</p>
+            {
+                newContactError === SESSION_EXPIRED && 
+                    <Link to="/login">
+                        <p style={{textAlign: "center", color: "#0074CC"}}>Login again</p>
+                    </Link>
+            }
             <div className="details">
                 <div className="field">
                     <p>Phone Number:</p>
@@ -54,7 +71,6 @@ function NewContact() {
 
             </div>
             <div className="buttons">
-                
                 <Button variant="contained" onClick={()=> submitContact()} style={{backgroundColor: "#04BE50", marginRight: "21px"}}>Add</Button>
                 <Button variant="outlined" onClick={() => {dispatch(cancelNewContact())}} style={{color: "#04BE50", border: "1px solid #04BE50"}}>Cancel</Button>
             </div>

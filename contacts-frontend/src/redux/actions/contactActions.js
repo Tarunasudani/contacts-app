@@ -1,4 +1,4 @@
-import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, SELECT_CONTACT, UPDATE_NEW_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE , DELETE_CONTACT_FAILURE, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE, DELETE_CONTACT_SUCCESS } from "./actionTypes"
+import { ADD_NEW_CONTACT, CANCEL_NEW_CONTACT, CREATE_NEW_CONTACT_SUCCESS, GET_ALL_CONTACTS, GET_ALL_CONTACTS_FAILURE, GET_ALL_CONTACTS_SUCCESS, SELECT_CONTACT, UPDATE_NEW_CONTACT, EDIT_CONTACT, UPDATE_CONTACT_SUCCESS, UPDATE_CONTACT_FAILURE, CANCEL_UPDATE , DELETE_CONTACT_FAILURE, UPDATE_CONTACT_SCORE_SUCCESS, UPDATE_CONTACT_SCORE_FAILURE, DELETE_CONTACT_SUCCESS, CREATE_NEW_CONTACT_FAILURE } from "./actionTypes"
 import axios from "axios";
 
 
@@ -39,8 +39,8 @@ export const getContacts = (navigate) => {
             })
             .catch(error => {
                 dispatch(getAllContactsFailure(error.message));
-                alert("Session token expired. Login again!!");
                 navigate("/login");
+                sessionStorage.removeItem("sessionToken");
             })
     }
 }
@@ -87,12 +87,12 @@ export const createNewContactSuccess = (contact) => {
 
 export const createNewContactFailure = (error) => {
     return {
-        type: CREATE_NEW_CONTACT_SUCCESS,
+        type: CREATE_NEW_CONTACT_FAILURE,
         error: error,
     }
 }
 
-export const createContact = (payload, navigate) => {
+export const createContact = (payload, navigate, setNewContactError) => {
     return (dispatch) => {
         axios({
             method: 'post',
@@ -111,9 +111,13 @@ export const createContact = (payload, navigate) => {
                 dispatch(selectContact(contact));
             })
             .catch(error => {
-                dispatch(createNewContactFailure(error.message));
-                alert("Session token expired. Login again!!");
-                navigate("/login");
+                if(error.response && error.response.status === 401) {
+                    setNewContactError(error.response.data.message);
+                    sessionStorage.removeItem("sessionToken");
+                } else {
+                    dispatch(createNewContactFailure(error.response.data.message));
+                    navigate("/error");
+                }
             })
     }
 }
