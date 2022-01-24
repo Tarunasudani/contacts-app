@@ -3,7 +3,6 @@ import { AUTH, AUTH_FAILURE, AUTH_SUCCESS } from "../actions/actionTypes";
 const initialState = {
     loading: false,
     auth: false,
-    error: null,
 }
 
 
@@ -20,7 +19,6 @@ const userReducer = (prevState = initialState, action) => {
                 ...prevState,
                 loading: false,
                 auth: true,
-                error: null,
             }
 
         case AUTH_FAILURE:
@@ -28,7 +26,6 @@ const userReducer = (prevState = initialState, action) => {
                 ...prevState,
                 loading: false,
                 auth: false,
-                error: action.payload
             }
 
 

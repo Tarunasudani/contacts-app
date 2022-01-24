@@ -13,14 +13,13 @@ export const authSuccess = () => {
     }
 }
 
-export const authFailure = (error) => {
+export const authFailure = () => {
     return {
         type: AUTH_FAILURE,
-        payload: error
     }
 }
 
-export const createUser = (email, password, navigate) => {
+export const createUser = (email, password, navigate,setRegistrationError) => {
     return (dispatch) => {
         dispatch(auth())
         axios({
@@ -42,14 +41,13 @@ export const createUser = (email, password, navigate) => {
                 navigate("/app");
             })
             .catch(error => {
-                dispatch(authFailure(error.message));
-                alert("User already exists!!! Login Instead");
-                navigate("/login");
+                dispatch(authFailure());
+                setRegistrationError("User already exists. Login instead!!");
             })
     }
 }
 
-export const verifyUser = (email, password, navigate) => {
+export const verifyUser = (email, password, navigate, setAuthError) => {
     return (dispatch) => {
         dispatch(auth())
         axios({
@@ -63,21 +61,23 @@ export const verifyUser = (email, password, navigate) => {
             data: {
                 "email": email,
                 "password": password,
-            },
+            }
         })
             .then(response => {
                 let token = response.data.sessionToken;
-                if(token) {
-                    sessionStorage.setItem("sessionToken", token);
-                    dispatch(authSuccess());
-                    navigate("/app");
-                } else {
-                    dispatch(authFailure("Invalid Credentials"));
-                    alert("Invalid Credentials");
-                }
+                sessionStorage.setItem("sessionToken", token);
+                dispatch(authSuccess());
+                navigate("/app");
+                
             })
             .catch(error => {
-                dispatch(authFailure(error.message));
+                if(error.response && error.response.status === 400) {
+                    setAuthError("Invalid Credentials. Login again!!");
+                    dispatch(authFailure());
+                } else {
+                    dispatch(authFailure(error.message));
+                }
+                
             })
     }
 }
