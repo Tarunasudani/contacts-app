@@ -57,7 +57,7 @@ public class ContactController {
         return new ResponseEntity<>(contactDAO.deleteContact(userId, uniqueContactRequest.getContactId()), HttpStatus.OK);
     }
 
-    @PostMapping("/contact/update")
+    @PutMapping("/contact/update")
     public ResponseEntity<ContactResponse> updateContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
         Integer userId = jwtUtil.verifyTokenAndGetUserId(sessionToken);
 

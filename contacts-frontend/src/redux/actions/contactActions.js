@@ -151,7 +151,7 @@ export const updateContactFailure = (err) => {
 export const updateContact = (payload, navigate) => {
     return (dispatch) => {
         axios({
-            method: 'post',
+            method: 'put',
             url: '/contact/update',
             baseURL: 'http://localhost:8080',
             headers: {
