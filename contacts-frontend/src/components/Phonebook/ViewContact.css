@@ -1,6 +1,5 @@
 .view-contact {
     background-color: #212327;
-    height: 100vh;
     flex: 0.65;
     margin: 28px;
   }
@@ -24,12 +23,12 @@
   }
   .edit {
     color: #04be50;
-    float: right;
     margin: 20px;
     cursor: pointer;
   }
   .headers {
     display: flex;
+    justify-content: space-between;
   }
   
   .view-contact .name:focus {

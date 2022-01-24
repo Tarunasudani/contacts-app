@@ -20,7 +20,10 @@ function Sidebar() {
     
     useEffect(() => {
         dispatch(getContacts(navigate));
-    }, [dispatch, navigate])
+        if(contactSelector.selectedContact !== null) {
+            document.getElementById(contactSelector.selectedContact.contactId).scrollIntoView();
+        }
+    }, [dispatch, navigate, contactSelector.selectedContact])
 
 
     const compareFn = (contactA, contactB) => {

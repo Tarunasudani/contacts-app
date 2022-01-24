@@ -124,7 +124,7 @@ const contactReducer = (prevState = initialState, action) => {
         
         case UPDATE_CONTACT_SUCCESS:
             return {
-                ... prevState,
+                ...prevState,
                 editContact : {
                     editing : false,
                     contactName: "Name",
@@ -160,7 +160,7 @@ const contactReducer = (prevState = initialState, action) => {
 
         case DELETE_CONTACT_FAILURE : 
             return {
-                ... prevState,
+                ...prevState,
                 deleteContactError : action.payload
             }
 

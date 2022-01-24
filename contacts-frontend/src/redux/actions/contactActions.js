@@ -76,12 +76,11 @@ export const selectContact = (contact) => {
 
 
 
-export const createNewContactSuccess = (contactId, contact) => {
+export const createNewContactSuccess = (contact) => {
     return {
         type: CREATE_NEW_CONTACT_SUCCESS,
         payload: {
-            contactId: contactId,
-            ...contact
+            ...contact,
         }
     }
 }
@@ -106,8 +105,10 @@ export const createContact = (payload, navigate) => {
             data: payload,
         })
             .then(response => {
-                console.log(payload);
-                dispatch(createNewContactSuccess(response.data, payload));
+                dispatch(createNewContactSuccess(response.data));
+                let contact = response.data
+                contact.contactDetails = JSON.stringify(contact.contactDetails);
+                dispatch(selectContact(contact));
             })
             .catch(error => {
                 dispatch(createNewContactFailure(error.message));

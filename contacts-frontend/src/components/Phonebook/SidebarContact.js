@@ -17,27 +17,29 @@ function SidebarContact({contact, colorId}) {
     const [isSelected, setIsSelected] = useState(false);
 
     useEffect(() => {
-        if ( contactSelector.selectedContact) {
+        if ( contactSelector.selectedContact !== null) {
             if (contactSelector.selectedContact.contactId === contact.contactId) {
                 setIsSelected(true);
             } else {
                 setIsSelected(false);
             }
         }
-    }, [isSelected, contactSelector.selectedContact])
+    }, [contactSelector.selectedContact, contact.contactId])
 
-    function getInitials(name) {
+    const getInitials = (name) => {
         var initials = "";
         name.split(" ").forEach(part => {
             initials += part[0].toUpperCase();
         });
         return initials;
     }
+    
     const handleClick = () => {
         dispatch(selectContact(contact)); 
         dispatch(updateContactScore(contact)); 
         setIsSelected(true);
     }
+
     const [hover, setHover] = useState(false);
 
     return (
@@ -46,7 +48,7 @@ function SidebarContact({contact, colorId}) {
                 <Avatar sx={{bgcolor: colors[colorId]}}>{getInitials(contact.contactName)}</Avatar>
                 <p style={{width: "100%"}}>{contact.contactName}</p>
                 {
-                    hover && <IconButton onClick = {() => dispatch( deleteContact(contact) ) } >
+                    hover && <IconButton onClick = {(e) => { e.stopPropagation(); dispatch(deleteContact(contact)); }} >
                         <DeleteIcon  style={{color: "#898A8C"}}/>
                     </IconButton>
                 }

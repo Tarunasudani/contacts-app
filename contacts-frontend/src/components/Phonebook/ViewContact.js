@@ -1,6 +1,5 @@
 import "./ViewContact.css";
 import EditIcon from "@mui/icons-material/Edit";
-import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
 import {updateContact, editContact, cancelUpdate, updateContactScore} from '../../redux/actions/contactActions';
