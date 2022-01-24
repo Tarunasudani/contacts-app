@@ -1,10 +1,11 @@
-import Sidebar from "./Sidebar";
-import "./Phonebook.css";
-import NewContact from "./NewContact";
 import { useSelector } from "react-redux";
-import ViewContact from "./ViewContact";
 
-function Phonebook() {
+import Sidebar from "./Sidebar";
+import NewContact from "./NewContact";
+import ViewContact from "./ViewContact";
+import "./Phonebook.css";
+
+const Phonebook = () => {
 
     const contactSelector = useSelector((state) => state.contact);
 

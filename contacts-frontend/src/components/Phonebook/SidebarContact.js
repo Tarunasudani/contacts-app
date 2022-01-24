@@ -1,22 +1,23 @@
-import Avatar from '@mui/material/Avatar';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContact, deleteContact, updateContactScore, getContacts } from '../../redux/actions/contactActions';
-
-import "./SidebarContact.css";
-import { IconButton } from '@mui/material';
-import { colors } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 
+import Avatar from '@mui/material/Avatar';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
+
+import { selectContact, deleteContact, updateContactScore, getContacts } from '../../redux/actions/contactActions';
+import { colors } from '../../constants';
+import "./SidebarContact.css";
 
 
-function SidebarContact({contact, colorId}) {
+const SidebarContact = ({contact, colorId}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const contactSelector = useSelector( (state) => state.contact );
     const [isSelected, setIsSelected] = useState(false);
+    const [hover, setHover] = useState(false);
 
     useEffect(() => {
         if ( contactSelector.selectedContact !== null) {
@@ -43,7 +44,6 @@ function SidebarContact({contact, colorId}) {
         setIsSelected(true);
     }
 
-    const [hover, setHover] = useState(false);
 
     return (
         <div id={contact.contactId} style={{backgroundColor: (hover||isSelected)  &&  "#4A4C4F"}}>

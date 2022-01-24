@@ -1,22 +1,22 @@
-import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+
+import Button from '@mui/material/Button';
+
 import { SESSION_EXPIRED } from '../../constants';
 import {updateNewContact, cancelNewContact, createContact} from '../../redux/actions/contactActions';
 import { validateEmail, validatePhoneNumber } from '../../utils';
+import "./NewContact.css";
 
-
-import "./NewContact.css"
-
-function NewContact() {
+const NewContact = () => {
 
     const dispatch = useDispatch();
     const contactSelector = useSelector((state) => state.contact);
     const navigate = useNavigate();
     const [newContactError, setNewContactError] = useState(null);
 
-    function submitContact() {
+    const submitContact = () => {
 
         if(contactSelector.newContact.contactName.length === 0) {
             setNewContactError("Contact name not provided!!!")
@@ -36,6 +36,7 @@ function NewContact() {
             }, navigate, setNewContactError));
             setNewContactError(null);
         }
+
     }
 
     return (

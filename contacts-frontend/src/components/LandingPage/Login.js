@@ -1,12 +1,16 @@
-import "./Auth.css"
-import Button from '@mui/material/Button';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {verifyUser} from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
+
 import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+
+import {verifyUser} from "../../redux/actions/userActions";
 import { validateEmail } from "../../utils";
-function Login() {
+import "./Auth.css"
+
+
+const Login = () => {
 
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -65,4 +69,6 @@ function Login() {
     )
 
 }
+
+
 export default Login;

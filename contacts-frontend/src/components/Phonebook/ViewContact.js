@@ -1,19 +1,21 @@
-import "./ViewContact.css";
-import EditIcon from "@mui/icons-material/Edit";
-import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
+import EditIcon from "@mui/icons-material/Edit";
+import Button from '@mui/material/Button';
+
 import {updateContact, editContact, cancelUpdate, setContactError} from '../../redux/actions/contactActions';
 import { validateEmail, validatePhoneNumber } from '../../utils';
 import { SESSION_EXPIRED } from '../../constants';
+import "./ViewContact.css";
 
-function ViewContact() {
+const ViewContact = () => {
 
   const contactSelector = useSelector((state) => state.contact);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function submitContact() {
+  const submitContact = () => {
 
     if(contactSelector.editContact.contactName.length === 0) {
       dispatch(setContactError("Contact name not provided!!!"));
@@ -36,7 +38,7 @@ function ViewContact() {
     }
 }
 
-  function editHandler() {
+  const editHandler = () => {
     dispatch(editContact("editing", true));
     dispatch(editContact("contactName", contactSelector.selectedContact.contactName));
     dispatch(editContact("phoneNumber", contactSelector.selectedContact.phoneNumber));

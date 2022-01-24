@@ -1,16 +1,18 @@
-import AddIcon from '@mui/icons-material/Add';
-import { IconButton, LinearProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getContacts, addNewContact } from '../../redux/actions/contactActions';
-import "./Sidebar.css";
-import SidebarContact from './SidebarContact';
+
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { IconButton, LinearProgress } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+
+import { getContacts, addNewContact } from '../../redux/actions/contactActions';
+import SidebarContact from './SidebarContact';
+import "./Sidebar.css";
 
 
-function Sidebar() {
+const Sidebar = () => {
 
     const dispatch = useDispatch();
     const contactSelector = useSelector((state) => state.contact);

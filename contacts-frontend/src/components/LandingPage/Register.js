@@ -1,13 +1,15 @@
-import "./Auth.css"
-import Button from '@mui/material/Button';
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {createUser} from "../../redux/actions/userActions";
 import { Link, useNavigate } from "react-router-dom";
-import CircularProgress from '@mui/material/CircularProgress';
-import { validateEmail } from "../../utils";
 
-function Register() {
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
+import {createUser} from "../../redux/actions/userActions";
+import { validateEmail } from "../../utils";
+import "./Auth.css"
+
+const Register = () => {
 
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");

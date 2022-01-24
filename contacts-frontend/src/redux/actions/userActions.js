@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { AUTH, AUTH_FAILURE, AUTH_SUCCESS } from "./actionTypes";
 import { setDefault } from "./contactActions";
 
@@ -28,7 +29,6 @@ export const createUser = (email, password, navigate,setRegistrationError) => {
             url: '/user/new',
             baseURL: 'http://localhost:8080',
             headers: {
-                'Authorization': sessionStorage.getItem("sessionToken"),
                 'Content-Type': "application/json"
             },
             data: {
@@ -57,7 +57,6 @@ export const verifyUser = (email, password, navigate, setAuthError) => {
             url: '/user/login',
             baseURL: 'http://localhost:8080',
             headers: {
-                'Authorization': sessionStorage.getItem("sessionToken"),
                 'Content-Type': "application/json"
             },
             data: {

@@ -1,13 +1,14 @@
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
 import Button from '@mui/material/Button';
 import CallIcon from '@mui/icons-material/Call';
 import ContactsIcon from '@mui/icons-material/Contacts';
+
 import "./LandingPage.css";
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 
 
-
-function LandingPage() {
+const LandingPage = () => {
 
     const navigate = useNavigate();
 
