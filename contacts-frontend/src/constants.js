@@ -2,4 +2,4 @@ export const colors = ["red", "green", "orange","dark-green", "black", "purple",
 
 export const BASE_URL = 'http://localhost:8080';
 
-export const SESSION_EXPIRED = "Session Expired/Invalid";
+export const SESSION_EXPIRED = "Session Token Expired/Invalid";

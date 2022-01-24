@@ -1,10 +1,7 @@
 package com.flock.contactsapp.util;
-import com.flock.contactsapp.dao.UserDAO;
 import com.flock.contactsapp.exception.AuthorizationException;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
@@ -35,7 +32,7 @@ public class JwtUtil {
             Claims tokenDetails = parseToken(sessionToken);
             return Integer.parseInt(tokenDetails.getId());
         } catch (ExpiredJwtException | SignatureException ex) {
-            throw new AuthorizationException("Session Token inspired/invalid");
+            throw new AuthorizationException("Session Token Expired/Invalid");
         }
     }
 

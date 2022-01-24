@@ -49,7 +49,14 @@ const contactReducer = (prevState = initialState, action) => {
         case ADD_NEW_CONTACT: return {
             ...prevState,
             addNewContact: true,
-            selectedContact: null
+            selectedContact: null,
+            newContact: {
+                contactName: "Name",
+                phoneNumber: "",
+                email: "",
+                address: "",
+                company: "",        
+            }
         }
 
         case CANCEL_NEW_CONTACT: return {

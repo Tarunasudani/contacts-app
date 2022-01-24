@@ -1,20 +1,15 @@
 package com.flock.contactsapp.controller;
 import com.flock.contactsapp.dao.UserDAO;
-import com.flock.contactsapp.exception.InvalidUser;
 import com.flock.contactsapp.model.User;
 import com.flock.contactsapp.request.UserRequest;
 import com.flock.contactsapp.response.AuthResponse;
 import com.flock.contactsapp.util.JwtUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 @CrossOrigin
@@ -27,7 +22,6 @@ public class UserController {
 
     @PostMapping("/user/login")
     public AuthResponse userLogin(@RequestBody UserRequest userRequest) {
-        System.out.println(userRequest);
 
         List<User> fetchedUser = userDAO.verifyUser(userRequest.getEmail(), userRequest.getPassword());
 
@@ -43,7 +37,6 @@ public class UserController {
 
     @PostMapping("/user/new")
     public AuthResponse userSignup(@RequestBody UserRequest userRequest) {
-        System.out.println(userRequest);
 
         int userId = userDAO.addUser(userRequest.getEmail(), userRequest.getPassword());
         return new AuthResponse(

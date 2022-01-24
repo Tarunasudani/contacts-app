@@ -26,7 +26,6 @@ public class ContactController {
     public ResponseEntity<ContactResponse> addContact(@RequestBody ContactRequest contactRequest, @RequestHeader("Authorization") String sessionToken) {
         Integer userId = jwtUtil.verifyTokenAndGetUserId(sessionToken);
 
-        System.out.println(contactRequest);
         ContactResponse newContact = contactDAO.addContact(
                 userId,
                 contactRequest.getContactName(),
@@ -47,14 +46,12 @@ public class ContactController {
     public ResponseEntity<Integer> updateScore(@RequestBody UniqueContactRequest uniqueContactRequest, @RequestHeader("Authorization") String sessionToken) {
         Integer userId = jwtUtil.verifyTokenAndGetUserId(sessionToken);
 
-        System.out.println("updateScore : " + uniqueContactRequest);
         return new ResponseEntity<Integer>(contactDAO.updateScore(userId, uniqueContactRequest.getContactId()), HttpStatus.OK);
     }
 
 
     @DeleteMapping("/contact/delete")
     public ResponseEntity<Integer> deleteContact(@RequestBody UniqueContactRequest uniqueContactRequest, @RequestHeader("Authorization") String sessionToken) {
-        System.out.println("delete: " + uniqueContactRequest);
         Integer userId = jwtUtil.verifyTokenAndGetUserId(sessionToken);
 
         return new ResponseEntity<>(contactDAO.deleteContact(userId, uniqueContactRequest.getContactId()), HttpStatus.OK);
@@ -64,7 +61,6 @@ public class ContactController {
     public ResponseEntity<ContactResponse> updateContact(@RequestBody Contact contact, @RequestHeader("Authorization") String sessionToken) {
         Integer userId = jwtUtil.verifyTokenAndGetUserId(sessionToken);
 
-        System.out.println("updateContact " + contact);
         return new ResponseEntity<ContactResponse>(contactDAO.updateContact(userId, contact), HttpStatus.OK);
     }
 
