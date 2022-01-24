@@ -24,7 +24,16 @@ function ViewContact() {
     } else {
         alert("Name and Phone number are required fields")
     }
-}
+  }
+  function editHandler() {
+    dispatch(editContact("editing", true));
+    dispatch(editContact("contactName", contactSelector.selectedContact.contactName));
+    dispatch(editContact("phoneNumber", contactSelector.selectedContact.phoneNumber));
+    dispatch(editContact("address", JSON.parse(contactSelector.selectedContact.contactDetails).address));
+    dispatch(editContact("email", JSON.parse(contactSelector.selectedContact.contactDetails).email));
+    dispatch(editContact("company", JSON.parse(contactSelector.selectedContact.contactDetails).company));
+
+  }
 
   return (
     <div className="view-contact">
@@ -44,7 +53,7 @@ function ViewContact() {
         {
           (!(contactSelector.editContact.editing))
           &&
-          <EditIcon onClick={() => dispatch(editContact("editing", true)) } className="edit" />
+          <EditIcon onClick={() => editHandler() } className="edit" />
         }
         
       </div>
