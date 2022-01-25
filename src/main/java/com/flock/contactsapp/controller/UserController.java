@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 public class UserController {
@@ -22,12 +20,11 @@ public class UserController {
 
     @PostMapping("/user/login")
     public AuthResponse userLogin(@RequestBody UserRequest userRequest) {
-
-        List<User> fetchedUser = userDAO.verifyUser(userRequest.getEmail(), userRequest.getPassword());
+        User fetchedUser = userDAO.verifyAndGetUser(userRequest.getEmail(), userRequest.getPassword());
 
         return new AuthResponse(
                 jwtUtil.createToken(
-                        fetchedUser.get(0).getUserId(),
+                        fetchedUser.getUserId(),
                         userRequest.getEmail(),
                         9000000
                 )

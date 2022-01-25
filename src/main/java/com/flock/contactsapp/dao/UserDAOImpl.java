@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.List;
 
 @Repository
 public class UserDAOImpl implements UserDAO{
@@ -40,15 +39,15 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public List<User> verifyUser(String email, String password) {
-        List<User> users = jdbcTemplate.query(
+    public User verifyAndGetUser(String email, String password) {
+        User user = jdbcTemplate.queryForObject(
                 "SELECT * FROM User WHERE email=? AND password=?",
                 new BeanPropertyRowMapper<User>(User.class),
                 email,
                 password
         );
-        if ( users.size() == 0 ) throw new InvalidUser("User Not Found");
-        return users;
+        if ( user == null ) throw new InvalidUser("User Not Found");
+        return user;
     }
 
     @Override

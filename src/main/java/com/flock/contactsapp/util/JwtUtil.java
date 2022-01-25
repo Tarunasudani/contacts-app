@@ -1,6 +1,7 @@
 package com.flock.contactsapp.util;
 import com.flock.contactsapp.exception.AuthorizationException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Component;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;

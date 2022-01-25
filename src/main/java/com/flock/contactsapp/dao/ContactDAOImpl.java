@@ -72,7 +72,7 @@ public class ContactDAOImpl implements ContactDAO{
 
     @Override
     public ContactResponse updateContact(int userId, Contact contact) {
-         int changed = jdbcTemplate.update(
+         int numberOfRowsAffected = jdbcTemplate.update(
                 "UPDATE contacts " +
                         "SET contactName=? , phoneNumber=? , contactDetails=?" +
                         "WHERE userId=? AND contactId=?;",
